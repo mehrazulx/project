@@ -51,19 +51,20 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: 1.9.8
+        terraform_wrapper: false
 
     - name: Terraform Init
       run: |
         cd terraform
-        terraform init
+        terraform init -input=false -no-color
 
     - name: Terraform Plan
       run: |
         cd terraform
-        terraform plan
+        terraform plan -input=false -no-color
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main'
       run: |
         cd terraform
-        terraform apply -auto-approve
+        terraform apply -auto-approve -input=false -no-color
