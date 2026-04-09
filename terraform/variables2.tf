@@ -107,7 +107,8 @@ variable "smb_password" {
   default     = null
 
   validation {
-    condition     = !(var.enable_regaffairs_ingestion && var.enable_regaffairs_datasync) || (var.smb_password != null && trimspace(var.smb_password) != "" && var.smb_password != "REPLACE_ME")
+    # trimspace() cannot take null — use coalesce so plan works when smb_password is unset
+    condition     = !(var.enable_regaffairs_ingestion && var.enable_regaffairs_datasync) || (var.smb_password != null && trimspace(coalesce(var.smb_password, "")) != "" && var.smb_password != "REPLACE_ME")
     error_message = "Set smb_password to a non-placeholder value when RegAffairs DataSync is enabled."
   }
 }
